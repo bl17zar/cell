@@ -107,3 +107,7 @@ func (m *Map) IsInsideBorders(row, col int) bool {
 func (m *Map) IsEmpty(row int, col int) bool {
 	return m.IsInsideBorders(row, col) && m.Values[row-1][col-1] == SignEmpty
 }
+
+func (m *Map) IsObstacle(row int, col int) bool {
+	return m.IsInsideBorders(row, col) && m.Values[row-1][col-1] == SignObstacle
+}

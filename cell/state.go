@@ -185,7 +185,7 @@ func (s *State) clearWithNeighbours(nodes []*Node, dest *Map) {
 func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 	res := make([]*Display, 0, 4)
 
-	if s.Map.IsInsideBorders(n.Row, n.Col+1) {
+	if s.Map.IsInsideBorders(n.Row, n.Col+1) && !s.Map.IsObstacle(n.Row, n.Col+1) {
 		res = append(res, &Display{
 			Row:  n.Row,
 			Col:  n.Col + 1,
@@ -193,7 +193,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		})
 	}
 
-	if s.Map.IsInsideBorders(n.Row+1, n.Col) {
+	if s.Map.IsInsideBorders(n.Row+1, n.Col) && !s.Map.IsObstacle(n.Row+1, n.Col) {
 		res = append(res, &Display{
 			Row:  n.Row + 1,
 			Col:  n.Col,
@@ -201,7 +201,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		})
 	}
 
-	if s.Map.IsInsideBorders(n.Row, n.Col-1) {
+	if s.Map.IsInsideBorders(n.Row, n.Col-1) && !s.Map.IsObstacle(n.Row, n.Col-1) {
 		res = append(res, &Display{
 			Row:  n.Row,
 			Col:  n.Col - 1,
@@ -209,7 +209,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		})
 	}
 
-	if s.Map.IsInsideBorders(n.Row-1, n.Col) {
+	if s.Map.IsInsideBorders(n.Row-1, n.Col) && !s.Map.IsObstacle(n.Row-1, n.Col) {
 		res = append(res, &Display{
 			Row:  n.Row - 1,
 			Col:  n.Col,
