@@ -8,11 +8,11 @@ import (
 type SignType string
 
 const (
-	signEmpty          SignType = "·"
-	signNode           SignType = "◼"
-	signEdgeHorizontal SignType = "—"
-	signEdgeVertical   SignType = "|"
-	signObstacle       SignType = "⊠"
+	SignEmpty          SignType = "·"
+	SignNode           SignType = "◼"
+	SignEdgeHorizontal SignType = "—"
+	SignEdgeVertical   SignType = "|"
+	SignObstacle       SignType = "⊠"
 )
 
 type Map struct {
@@ -21,7 +21,7 @@ type Map struct {
 	values    [][]SignType
 }
 
-func NewMap(size, xMult int) *Map {
+func NewMap(size, xMult int, features []*Display) *Map {
 	values := make([][]SignType, 0, size)
 	for i := 0; i < size; i++ {
 		values = append(values, make([]SignType, size, size))
@@ -29,11 +29,15 @@ func NewMap(size, xMult int) *Map {
 
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
-			values[i][j] = signEmpty
+			values[i][j] = SignEmpty
 		}
 	}
 
-	values[15][15] = signObstacle
+	if len(features) != 0 {
+		for _, f := range features {
+			values[f.Row][f.Col] = f.Sign
+		}
+	}
 
 	xMultList := make([]string, 0, xMult)
 	for i := 0; i < xMult; i++ {
@@ -48,7 +52,7 @@ func NewMap(size, xMult int) *Map {
 }
 
 func (m *Map) Copy() *Map {
-	res := NewMap(m.size, len(strings.Split(m.xExtender, "")))
+	res := NewMap(m.size, len(strings.Split(m.xExtender, "")), nil)
 
 	for i, row := range m.values {
 		res.values[i] = row
@@ -80,5 +84,5 @@ func (m *Map) IsInsideBorders(row, col int) bool {
 }
 
 func (m *Map) IsEmpty(row int, col int) bool {
-	return m.IsInsideBorders(row, col) && m.values[row-1][col-1] == signEmpty
+	return m.IsInsideBorders(row, col) && m.values[row-1][col-1] == SignEmpty
 }

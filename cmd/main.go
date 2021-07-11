@@ -67,7 +67,7 @@ func Random(count int) func(g *cell.Graph, m *cell.Map) {
 	return func(g *cell.Graph, m *cell.Map) {
 		rand.Seed(time.Now().UnixNano())
 		for i := 0; i < count; i++ {
-			g.AddNode(rand.Intn(cellSize), rand.Intn(cellSize))
+			g.AddNode(rand.Intn(cellSize-1), rand.Intn(cellSize-1))
 		}
 
 		for n := range g.Nodes {
@@ -91,8 +91,31 @@ func Random(count int) func(g *cell.Graph, m *cell.Map) {
 	}
 }
 
+var features = []*cell.Display{
+	{
+		Row:  15,
+		Col:  15,
+		Sign: cell.SignObstacle,
+	},
+	{
+		Row:  15,
+		Col:  14,
+		Sign: cell.SignObstacle,
+	},
+	{
+		Row:  16,
+		Col:  14,
+		Sign: cell.SignObstacle,
+	},
+	{
+		Row:  16,
+		Col:  15,
+		Sign: cell.SignObstacle,
+	},
+}
+
 func main() {
-	m := machine.NewMachine(cellSize, xMult, Random(1))
+	m := machine.NewMachine(cellSize, xMult, Random(1), features)
 
 	m.Run()
 }

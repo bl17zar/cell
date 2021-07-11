@@ -12,8 +12,8 @@ type Display struct {
 	Sign SignType
 }
 
-func NewState(size, xMult int, seed func(*Graph, *Map)) *State {
-	m := NewMap(size, xMult)
+func NewState(size, xMult int, seed func(*Graph, *Map), features []*Display) *State {
+	m := NewMap(size, xMult, features)
 	g := NewGraph()
 
 	seed(g, m)
@@ -29,7 +29,7 @@ func GetNodeDisplay(n *Node) (*Display, error) {
 	return &Display{
 		Row:  n.Row,
 		Col:  n.Col,
-		Sign: signNode,
+		Sign: SignNode,
 	}, nil
 }
 
@@ -37,7 +37,7 @@ func GetNodeEmptyDisplay(n *Node) (*Display, error) {
 	return &Display{
 		Row:  n.Row,
 		Col:  n.Col,
-		Sign: signEmpty,
+		Sign: SignEmpty,
 	}, nil
 }
 
@@ -55,7 +55,7 @@ func GetEdgeDisplay(n1, n2 *Node) (*Display, error) {
 		display = &Display{
 			Row:  n1.Row,
 			Col:  col,
-			Sign: signEdgeHorizontal,
+			Sign: SignEdgeHorizontal,
 		}
 	} else {
 		var row int
@@ -68,7 +68,7 @@ func GetEdgeDisplay(n1, n2 *Node) (*Display, error) {
 		display = &Display{
 			Row:  row,
 			Col:  n1.Col,
-			Sign: signEdgeVertical,
+			Sign: SignEdgeVertical,
 		}
 	}
 
@@ -137,7 +137,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		res = append(res, &Display{
 			Row:  n.Row,
 			Col:  n.Col + 1,
-			Sign: signEmpty,
+			Sign: SignEmpty,
 		})
 	}
 
@@ -145,7 +145,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		res = append(res, &Display{
 			Row:  n.Row + 1,
 			Col:  n.Col,
-			Sign: signEmpty,
+			Sign: SignEmpty,
 		})
 	}
 
@@ -153,7 +153,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		res = append(res, &Display{
 			Row:  n.Row,
 			Col:  n.Col - 1,
-			Sign: signEmpty,
+			Sign: SignEmpty,
 		})
 	}
 
@@ -161,7 +161,7 @@ func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
 		res = append(res, &Display{
 			Row:  n.Row - 1,
 			Col:  n.Col,
-			Sign: signEmpty,
+			Sign: SignEmpty,
 		})
 	}
 

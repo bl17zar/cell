@@ -13,9 +13,9 @@ type Machine struct {
 	frame      int
 }
 
-func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map)) *Machine {
+func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map), features []*cell.Display) *Machine {
 	return &Machine{
-		Cells: []*cell.Cell{cell.NewCell(cellSize, xMult, seed)},
+		Cells: []*cell.Cell{cell.NewCell(cellSize, xMult, seed, features)},
 	}
 }
 

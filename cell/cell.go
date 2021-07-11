@@ -4,9 +4,9 @@ type Cell struct {
 	State *State
 }
 
-func NewCell(size, xMult int, seed func(*Graph, *Map)) *Cell {
+func NewCell(size, xMult int, seed func(*Graph, *Map), features []*Display) *Cell {
 	return &Cell{
-		State: NewState(size, xMult, seed),
+		State: NewState(size, xMult, seed, features),
 	}
 }
 
