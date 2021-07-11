@@ -8,20 +8,20 @@ import (
 )
 
 type Machine struct {
-	Cells      []*cell.Cell
+	Cell       *cell.Cell
 	generation int
 	drawer     drawers.Drawer
 }
 
 func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map), features []*cell.Display) *Machine {
 	return &Machine{
-		Cells:  []*cell.Cell{cell.NewCell(cellSize, xMult, seed, features)},
+		Cell:   cell.NewCell(cellSize, xMult, seed, features),
 		drawer: &drawers.ConsoleDrawer{},
 	}
 }
 
 func (m *Machine) Run() {
-	m.drawer.Draw(m.Cells[0].State.Map)
+	m.drawer.Draw(m.Cell.State.Map)
 
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
@@ -29,15 +29,13 @@ func (m *Machine) Run() {
 	for {
 		select {
 		case <-t.C:
-			for _, c := range m.Cells {
-				if m.generation%2 == 0 {
-					c.Evolve()
-				} else {
-					c.ClearCycles()
-				}
+			if m.generation%2 == 0 {
+				m.Cell.Evolve()
+			} else {
+				m.Cell.ClearCycles()
 			}
 
-			m.drawer.Draw(m.Cells[0].State.Map)
+			m.drawer.Draw(m.Cell.State.Map)
 			m.generation++
 		}
 	}
