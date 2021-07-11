@@ -24,7 +24,7 @@ func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map), features
 func (m *Machine) Run() {
 	m.drawer.Draw(m.Cell.State.Map)
 
-	t := time.NewTicker(time.Millisecond * 100)
+	t := time.NewTicker(time.Millisecond * 500)
 	defer t.Stop()
 
 	for {
