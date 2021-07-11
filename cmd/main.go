@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"time"
 
 	"github.com/bl17zar/cell/cell"
 	"github.com/bl17zar/cell/machine"
@@ -64,6 +65,7 @@ func Dead() func(g *cell.Graph, m *cell.Map) {
 
 func Random() func(g *cell.Graph, m *cell.Map) {
 	return func(g *cell.Graph, m *cell.Map) {
+		rand.Seed(time.Now().UnixNano())
 		g.AddNode(rand.Intn(cellSize), rand.Intn(cellSize))
 
 		for n := range g.Nodes {
@@ -88,7 +90,7 @@ func Random() func(g *cell.Graph, m *cell.Map) {
 }
 
 func main() {
-	m := machine.NewMachine(cellSize, xMult, Alive())
+	m := machine.NewMachine(cellSize, xMult, Random())
 
 	m.Run()
 }

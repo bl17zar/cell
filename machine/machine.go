@@ -19,20 +19,25 @@ func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map)) *Machine
 }
 
 func (m *Machine) Run() {
+	m.Draw()
+
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
 
-	m.Draw()
+	var i int
 
 	for {
 		select {
 		case <-t.C:
-
 			for _, c := range m.Cells {
-				c.Evolve()
+				if i%2 == 0 {
+					c.Evolve()
+				} else {
+					c.ClearCycles()
+				}
 			}
-
 			m.Draw()
+			i++
 		}
 	}
 }

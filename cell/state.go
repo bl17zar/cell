@@ -26,10 +26,6 @@ func NewState(size, xMult int, seed func(*Graph, *Map)) *State {
 }
 
 func GetNodeDisplay(n *Node) (*Display, error) {
-	// if n.Row%2 != 0 || n.Col%2 != 0 {
-	// 	return nil, errors.New("node has wrong coords")
-	// }
-
 	return &Display{
 		Row:  n.Row,
 		Col:  n.Col,
@@ -38,10 +34,6 @@ func GetNodeDisplay(n *Node) (*Display, error) {
 }
 
 func GetNodeEmptyDisplay(n *Node) (*Display, error) {
-	// if n.Row%2 != 0 || n.Col%2 != 0 {
-	// 	return nil, errors.New("node has wrong coords")
-	// }
-
 	return &Display{
 		Row:  n.Row,
 		Col:  n.Col,
@@ -60,10 +52,6 @@ func GetEdgeDisplay(n1, n2 *Node) (*Display, error) {
 			col = n2.Col + 1
 		}
 
-		// if col%2 == 0 {
-		// 	return nil, errors.New("edge has wrong coords")
-		// }
-
 		display = &Display{
 			Row:  n1.Row,
 			Col:  col,
@@ -76,10 +64,6 @@ func GetEdgeDisplay(n1, n2 *Node) (*Display, error) {
 		} else {
 			row = n2.Row + 1
 		}
-
-		// if row%2 == 0 {
-		// 	return nil, errors.New("edge has wrong coords")
-		// }
 
 		display = &Display{
 			Row:  row,
@@ -116,7 +100,6 @@ func (s *State) Mutate() {
 		}
 	}
 
-	s.clearWithNeighbours(nextGraph.ClearCycles(), nextMap)
 	s.drawChildren(nextGraph, nextMap)
 
 	s.Graph = nextGraph
@@ -135,7 +118,7 @@ func (s *State) clearWithNeighbours(nodes []*Node, dest *Map) {
 
 		dest.Set(d.Row, d.Col, d.Sign)
 
-		ds, err := GetNeighboursEmptyDisplays(n)
+		ds, err := s.GetNeighboursEmptyDisplays(n)
 		if err != nil {
 			panic(err)
 		}
@@ -147,33 +130,42 @@ func (s *State) clearWithNeighbours(nodes []*Node, dest *Map) {
 
 }
 
-func GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
-	// if n.Row%2 != 0 || n.Col%2 != 0 {
-	// 	return nil, errors.New("node has wrong coords")
-	// }
+func (s *State) GetNeighboursEmptyDisplays(n *Node) ([]*Display, error) {
+	res := make([]*Display, 0, 4)
 
-	return []*Display{
-		{
-			Row: n.Row,
-			Col: n.Col + 1,
+	if s.Map.IsInsideBorders(n.Row, n.Col+1) {
+		res = append(res, &Display{
+			Row:  n.Row,
+			Col:  n.Col + 1,
 			Sign: signEmpty,
-		},
-		{
-			Row: n.Row + 1,
-			Col: n.Col,
+		})
+	}
+
+	if s.Map.IsInsideBorders(n.Row+1, n.Col) {
+		res = append(res, &Display{
+			Row:  n.Row + 1,
+			Col:  n.Col,
 			Sign: signEmpty,
-		},
-		{
-			Row: n.Row,
-			Col: n.Col - 1,
+		})
+	}
+
+	if s.Map.IsInsideBorders(n.Row, n.Col-1) {
+		res = append(res, &Display{
+			Row:  n.Row,
+			Col:  n.Col - 1,
 			Sign: signEmpty,
-		},
-		{
-			Row: n.Row - 1,
-			Col: n.Col,
+		})
+	}
+
+	if s.Map.IsInsideBorders(n.Row-1, n.Col) {
+		res = append(res, &Display{
+			Row:  n.Row - 1,
+			Col:  n.Col,
 			Sign: signEmpty,
-		},
-	}, nil
+		})
+	}
+
+	return res, nil
 }
 
 func (s *State) drawChildren(nextGen *Graph, dest *Map) {
@@ -223,6 +215,22 @@ func (s *State) giveBirth(n *Node, dest *Graph) {
 	for _, child := range children {
 		dest.AddEdge(n, child)
 	}
+}
+
+func (s *State) ClearCycles() {
+	s.LastIterations = 0
+	if s.Graph.Size() == 0 {
+		return
+	}
+
+	nextGraph := s.Graph.Copy()
+	nextMap := s.Map.Copy()
+
+	s.clearWithNeighbours(nextGraph.ClearCycles(), nextMap)
+
+	s.Graph = nextGraph
+	s.Map = nextMap
+	s.Graph.FixSize()
 }
 
 func (g *Graph) FixSize() {

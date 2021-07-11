@@ -12,6 +12,7 @@ const (
 	signNode           SignType = "◼"
 	signEdgeHorizontal SignType = "—"
 	signEdgeVertical   SignType = "|"
+	signObstacle       SignType = "⊠"
 )
 
 type Map struct {
@@ -72,6 +73,10 @@ func (m *Map) String() string {
 	return b.String()
 }
 
+func (m *Map) IsInsideBorders(row, col int) bool {
+	return row-1 >= 0 && row-1 < m.size && col-1 >= 0 && col-1 < m.size
+}
+
 func (m *Map) IsEmpty(row int, col int) bool {
-	return row-1 >= 0 && row-1 < m.size && col-1 >= 0 && col-1 < m.size && m.values[row-1][col-1] == signEmpty
+	return m.IsInsideBorders(row, col) && m.values[row-1][col-1] == signEmpty
 }

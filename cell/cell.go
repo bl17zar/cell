@@ -10,6 +10,10 @@ func NewCell(size, xMult int, seed func(*Graph, *Map)) *Cell {
 	}
 }
 
-func(c *Cell) Evolve() {
+func (c *Cell) Evolve() {
 	c.State.Mutate()
+}
+
+func (c *Cell) ClearCycles() {
+	c.State.ClearCycles()
 }
