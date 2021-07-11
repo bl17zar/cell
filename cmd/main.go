@@ -92,11 +92,11 @@ func Random(count int) func(g *cell.Graph, m *cell.Map) {
 }
 
 var features = []*cell.Display{
-	{
-		Row:  15,
-		Col:  15,
-		Sign: cell.SignObstacle,
-	},
+	// {
+	// 	Row:  15,
+	// 	Col:  15,
+	// 	Sign: cell.SignObstacle,
+	// },
 	// {
 	// 	Row:  15,
 	// 	Col:  14,

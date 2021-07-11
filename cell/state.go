@@ -124,9 +124,14 @@ func (s *State) Mutate() {
 		return
 	}
 
+	s.Graph.ClearCycles(s.undeletedCycles)
+	s.Graph.FixSize()
+
 	visited := make(map[*Node]struct{}, s.Graph.Size())
 	nextGraph := s.Graph.Copy()
 	nextMap := s.Map.Copy()
+
+	s.clearWithNeighbours(s.undeletedCycles, nextMap)
 
 	for len(visited) < s.Graph.Size() {
 		for id := range s.Graph.Nodes {
@@ -143,16 +148,10 @@ func (s *State) Mutate() {
 		}
 	}
 
-	s.clearWithNeighbours(s.undeletedCycles, nextMap)
-
 	s.drawChildren(nextGraph, nextMap)
 
 	cycles := nextGraph.FindCycles()
-
 	s.drawCycles(cycles, nextGraph, nextMap)
-
-	nextGraph.ClearCycles(cycles)
-
 	s.undeletedCycles = cycles
 
 	s.Graph = nextGraph

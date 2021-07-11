@@ -1,6 +1,7 @@
 package machine
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/bl17zar/cell/cell"
@@ -32,6 +33,8 @@ func (m *Machine) Run() {
 			m.Cell.Evolve()
 
 			m.drawer.Draw(m.Cell.State.Map)
+
+			fmt.Println("generation:", m.generation)
 
 			m.generation++
 		}

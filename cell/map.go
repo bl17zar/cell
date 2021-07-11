@@ -12,7 +12,8 @@ const (
 	SignEdgeHorizontal SignType = "—"
 	SignEdgeVertical   SignType = "|"
 
-	SignEmpty    SignType = "·"
+	// SignEmpty    SignType = "·"
+	SignEmpty    SignType = " "
 	SignObstacle SignType = "⊠"
 
 	SignCycleNode                    = "□"

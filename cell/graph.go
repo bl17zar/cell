@@ -97,11 +97,15 @@ func (g *Graph) FindCycles() []*Node {
 		cycles = append(cycles, g.findCycles(id, newOrderedSet(), visited)...)
 	}
 
+	cycleNodes := map[string]struct{}{}
 	res := []*Node{}
 	for _, cycle := range cycles {
 		for _, nodeId := range cycle {
 			if _, ok := g.Nodes[nodeId]; ok {
-				res = append(res, g.Nodes[nodeId])
+				if _, ok := cycleNodes[nodeId]; !ok {
+					cycleNodes[nodeId] = struct{}{}
+					res = append(res, g.Nodes[nodeId])
+				}
 			}
 		}
 	}
