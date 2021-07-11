@@ -79,7 +79,13 @@ func (g *Graph) DeleteNode(n *Node) {
 	delete(g.Edges, n.id())
 }
 
-func (g *Graph) ClearCycles() []*Node {
+func (g *Graph) ClearCycles(nodes []*Node) {
+	for _, n := range nodes {
+		g.DeleteNode(n)
+	}
+}
+
+func (g *Graph) FindCycles() []*Node {
 	visited := make(map[string]struct{}, len(g.Nodes))
 	cycles := [][]string{}
 
@@ -91,19 +97,16 @@ func (g *Graph) ClearCycles() []*Node {
 		cycles = append(cycles, g.findCycles(id, newOrderedSet(), visited)...)
 	}
 
-	cleared := []*Node{}
+	res := []*Node{}
 	for _, cycle := range cycles {
 		for _, nodeId := range cycle {
 			if _, ok := g.Nodes[nodeId]; ok {
-				n := g.Nodes[nodeId]
-				g.DeleteNode(n)
-
-				cleared = append(cleared, n)
+				res = append(res, g.Nodes[nodeId])
 			}
 		}
 	}
 
-	return cleared
+	return res
 }
 
 func (g *Graph) findCycles(nodeID string, parents orderedSet, visited map[string]struct{}) (cycles [][]string) {

@@ -97,25 +97,25 @@ var features = []*cell.Display{
 		Col:  15,
 		Sign: cell.SignObstacle,
 	},
-	{
-		Row:  15,
-		Col:  14,
-		Sign: cell.SignObstacle,
-	},
-	{
-		Row:  16,
-		Col:  14,
-		Sign: cell.SignObstacle,
-	},
-	{
-		Row:  16,
-		Col:  15,
-		Sign: cell.SignObstacle,
-	},
+	// {
+	// 	Row:  15,
+	// 	Col:  14,
+	// 	Sign: cell.SignObstacle,
+	// },
+	// {
+	// 	Row:  16,
+	// 	Col:  14,
+	// 	Sign: cell.SignObstacle,
+	// },
+	// {
+	// 	Row:  16,
+	// 	Col:  15,
+	// 	Sign: cell.SignObstacle,
+	// },
 }
 
 func main() {
-	m := machine.NewMachine(cellSize, xMult, Random(1), features)
+	m := machine.NewMachine(cellSize, xMult, Alive(), features)
 
 	m.Run()
 }

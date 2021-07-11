@@ -13,7 +13,3 @@ func NewCell(size, xMult int, seed func(*Graph, *Map), features []*Display) *Cel
 func (c *Cell) Evolve() {
 	c.State.Mutate()
 }
-
-func (c *Cell) ClearCycles() {
-	c.State.ClearCycles()
-}

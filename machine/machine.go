@@ -29,13 +29,10 @@ func (m *Machine) Run() {
 	for {
 		select {
 		case <-t.C:
-			if m.generation%2 == 0 {
-				m.Cell.Evolve()
-			} else {
-				m.Cell.ClearCycles()
-			}
+			m.Cell.Evolve()
 
 			m.drawer.Draw(m.Cell.State.Map)
+
 			m.generation++
 		}
 	}

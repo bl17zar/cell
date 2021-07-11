@@ -8,11 +8,16 @@ import (
 type SignType string
 
 const (
-	SignEmpty          SignType = "·"
 	SignNode           SignType = "◼"
 	SignEdgeHorizontal SignType = "—"
 	SignEdgeVertical   SignType = "|"
-	SignObstacle       SignType = "⊠"
+
+	SignEmpty    SignType = "·"
+	SignObstacle SignType = "⊠"
+
+	SignCycleNode                    = "□"
+	SignCycleEdgeHorizontal SignType = "⋯"
+	SignCycleEdgeVertical   SignType = "⋮"
 )
 
 type Map struct {

@@ -1,9 +1,10 @@
 package cell
 
 type State struct {
-	Graph          *Graph
-	Map            *Map
-	LastIterations int
+	Graph           *Graph
+	Map             *Map
+	LastIterations  int
+	undeletedCycles []*Node
 }
 
 type Display struct {
@@ -30,6 +31,14 @@ func GetNodeDisplay(n *Node) (*Display, error) {
 		Row:  n.Row,
 		Col:  n.Col,
 		Sign: SignNode,
+	}, nil
+}
+
+func GetCycleNodeDisplay(n *Node) (*Display, error) {
+	return &Display{
+		Row:  n.Row,
+		Col:  n.Col,
+		Sign: SignCycleNode,
 	}, nil
 }
 
@@ -75,6 +84,40 @@ func GetEdgeDisplay(n1, n2 *Node) (*Display, error) {
 	return display, nil
 }
 
+func GetCycleEdgeDisplay(n1, n2 *Node) (*Display, error) {
+	var display *Display
+
+	if n1.Row == n2.Row {
+		var col int
+		if (n2.Col - n1.Col) > 0 {
+			col = n1.Col + 1
+		} else {
+			col = n2.Col + 1
+		}
+
+		display = &Display{
+			Row:  n1.Row,
+			Col:  col,
+			Sign: SignCycleEdgeHorizontal,
+		}
+	} else {
+		var row int
+		if (n2.Row - n1.Row) > 0 {
+			row = n1.Row + 1
+		} else {
+			row = n2.Row + 1
+		}
+
+		display = &Display{
+			Row:  row,
+			Col:  n1.Col,
+			Sign: SignCycleEdgeVertical,
+		}
+	}
+
+	return display, nil
+}
+
 func (s *State) Mutate() {
 	s.LastIterations = 0
 	if s.Graph.Size() == 0 {
@@ -100,7 +143,17 @@ func (s *State) Mutate() {
 		}
 	}
 
+	s.clearWithNeighbours(s.undeletedCycles, nextMap)
+
 	s.drawChildren(nextGraph, nextMap)
+
+	cycles := nextGraph.FindCycles()
+
+	s.drawCycles(cycles, nextGraph, nextMap)
+
+	nextGraph.ClearCycles(cycles)
+
+	s.undeletedCycles = cycles
 
 	s.Graph = nextGraph
 	s.Map = nextMap
@@ -217,20 +270,24 @@ func (s *State) giveBirth(n *Node, dest *Graph) {
 	}
 }
 
-func (s *State) ClearCycles() {
-	s.LastIterations = 0
-	if s.Graph.Size() == 0 {
-		return
+func (s *State) drawCycles(cycles []*Node, graph *Graph, dest *Map) {
+	for _, n := range cycles {
+		d, err := GetCycleNodeDisplay(n)
+		if err != nil {
+			panic(err)
+		}
+
+		dest.Set(d.Row, d.Col, d.Sign)
+
+		for _, eN := range graph.Edges[n.id()] {
+			d, err := GetCycleEdgeDisplay(n, eN)
+			if err != nil {
+				panic(err)
+			}
+			dest.Set(d.Row, d.Col, d.Sign)
+		}
+
 	}
-
-	nextGraph := s.Graph.Copy()
-	nextMap := s.Map.Copy()
-
-	s.clearWithNeighbours(nextGraph.ClearCycles(), nextMap)
-
-	s.Graph = nextGraph
-	s.Map = nextMap
-	s.Graph.FixSize()
 }
 
 func (g *Graph) FixSize() {
