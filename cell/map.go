@@ -33,6 +33,8 @@ func NewMap(size, xMult int) *Map {
 		}
 	}
 
+	values[15][15] = signObstacle
+
 	xMultList := make([]string, 0, xMult)
 	for i := 0; i < xMult; i++ {
 		xMultList = append(xMultList, " ")

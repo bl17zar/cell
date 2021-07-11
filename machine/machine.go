@@ -10,6 +10,7 @@ import (
 type Machine struct {
 	Cells      []*cell.Cell
 	generation int
+	frame      int
 }
 
 func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map)) *Machine {
@@ -24,26 +25,25 @@ func (m *Machine) Run() {
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
 
-	var i int
-
 	for {
 		select {
 		case <-t.C:
 			for _, c := range m.Cells {
-				if i%2 == 0 {
+				if m.frame%2 == 0 {
 					c.Evolve()
 				} else {
 					c.ClearCycles()
 				}
 			}
+
 			m.Draw()
-			i++
+			m.frame++
 		}
 	}
 }
 
 func (m *Machine) Draw() {
-	fmt.Println(fmt.Sprintf("generation: %d, iterations: %d", m.generation, m.Cells[0].State.LastIterations))
+	fmt.Println(fmt.Sprintf("generation: %d/%d, iterations: %d", m.generation, m.frame%2, m.Cells[0].State.LastIterations))
 
 	for _, c := range m.Cells {
 		fmt.Print(c.State.Map)
