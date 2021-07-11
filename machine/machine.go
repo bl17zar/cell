@@ -1,26 +1,27 @@
 package machine
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/bl17zar/cell/cell"
+	"github.com/bl17zar/cell/drawers"
 )
 
 type Machine struct {
 	Cells      []*cell.Cell
 	generation int
-	frame      int
+	drawer     drawers.Drawer
 }
 
 func NewMachine(cellSize, xMult int, seed func(*cell.Graph, *cell.Map), features []*cell.Display) *Machine {
 	return &Machine{
-		Cells: []*cell.Cell{cell.NewCell(cellSize, xMult, seed, features)},
+		Cells:  []*cell.Cell{cell.NewCell(cellSize, xMult, seed, features)},
+		drawer: &drawers.ConsoleDrawer{},
 	}
 }
 
 func (m *Machine) Run() {
-	m.Draw()
+	m.drawer.Draw(m.Cells[0].State.Map)
 
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
@@ -29,25 +30,15 @@ func (m *Machine) Run() {
 		select {
 		case <-t.C:
 			for _, c := range m.Cells {
-				if m.frame%2 == 0 {
+				if m.generation%2 == 0 {
 					c.Evolve()
 				} else {
 					c.ClearCycles()
 				}
 			}
 
-			m.Draw()
-			m.frame++
+			m.drawer.Draw(m.Cells[0].State.Map)
+			m.generation++
 		}
 	}
-}
-
-func (m *Machine) Draw() {
-	fmt.Println(fmt.Sprintf("generation: %d/%d, iterations: %d", m.generation, m.frame%2, m.Cells[0].State.LastIterations))
-
-	for _, c := range m.Cells {
-		fmt.Print(c.State.Map)
-	}
-
-	m.generation++
 }
