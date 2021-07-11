@@ -128,10 +128,11 @@ func (s *State) Mutate() {
 	s.Graph.FixSize()
 
 	visited := make(map[*Node]struct{}, s.Graph.Size())
-	nextGraph := s.Graph.Copy()
 	nextMap := s.Map.Copy()
 
 	s.clearWithNeighbours(s.undeletedCycles, nextMap)
+
+	nextGraph := s.Graph.Copy()
 
 	for len(visited) < s.Graph.Size() {
 		for id := range s.Graph.Nodes {
@@ -248,19 +249,19 @@ func (s *State) giveBirth(n *Node, dest *Graph) {
 
 	children := make([]*Node, 0, len(s.Graph.Edges[n.id()])/2)
 
-	if s.Map.IsEmpty(n.Row, n.Col+2) {
+	if !s.Map.IsObstacle(n.Row, n.Col+2) && s.Map.IsInsideBorders(n.Row, n.Col+2) {
 		children = append(children, dest.AddNode(n.Row, n.Col+2))
 	}
 
-	if s.Map.IsEmpty(n.Row+2, n.Col) {
+	if !s.Map.IsObstacle(n.Row+2, n.Col) && s.Map.IsInsideBorders(n.Row+2, n.Col) {
 		children = append(children, dest.AddNode(n.Row+2, n.Col))
 	}
 
-	if s.Map.IsEmpty(n.Row, n.Col-2) {
+	if !s.Map.IsObstacle(n.Row, n.Col-2) && s.Map.IsInsideBorders(n.Row, n.Col-2) {
 		children = append(children, dest.AddNode(n.Row, n.Col-2))
 	}
 
-	if s.Map.IsEmpty(n.Row-2, n.Col) {
+	if !s.Map.IsObstacle(n.Row-2, n.Col) && s.Map.IsInsideBorders(n.Row-2, n.Col) {
 		children = append(children, dest.AddNode(n.Row-2, n.Col))
 	}
 

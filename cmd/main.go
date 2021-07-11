@@ -122,7 +122,7 @@ func main() {
 	features = append(features, drawDown(cell.SignObstacle, 5, 13, 21)...)
 	features = append(features, drawDown(cell.SignObstacle, 5, 29, 21)...)
 	features = append(features, drawRight(cell.SignObstacle, 5, 12, 17)...)
-	features = append(features, drawRight(cell.SignObstacle, 27, 12, 6)...)
+	features = append(features, drawRight(cell.SignObstacle, 27, 12, 10)...)
 	features = append(features, drawRight(cell.SignObstacle, 27, 23, 6)...)
 
 	m := machine.NewMachine(cellSize, xMult, Alive(), features)
