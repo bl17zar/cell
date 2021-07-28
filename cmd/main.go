@@ -9,13 +9,14 @@ import (
 )
 
 const (
-	cellSize = 41
-	ww       = 2
+	cellSize    = 21
+	obstacleSie = 5
+	ww          = 2
 )
 
 func main() {
 	m := machine.Machine{
-		Cell:   cell.NewWithCentralSeed(cellSize),
+		Cell:   cell.NewWithCentralBoundedSeed(cellSize, obstacleSie),
 		Drawer: drawer.NewConsoleDrawer(ww),
 		Speed:  time.Second,
 	}

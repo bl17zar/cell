@@ -175,3 +175,7 @@ func (m *Map) AddCycleEdge(n1Row, n1Col, n2Row, n2Col int) {
 		m.set(row, n1Col, SymbolCycleEdgeVertical)
 	}
 }
+
+func (m *Map) AddObstacle(row, col int) {
+	m.set(row, col, SymbolObstacle)
+}
