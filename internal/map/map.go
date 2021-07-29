@@ -17,17 +17,15 @@ type Map struct {
 	Values [][]Symbol
 }
 
-type coords struct {
-	row int
-	col int
-}
+func (m *Map) Hash() string {
+	b := strings.Builder{}
+	for _, row := range m.Values {
+		for _, sym := range row {
+			b.WriteString(sym.String())
+		}
+	}
 
-func (c coords) Row() int {
-	return c.row
-}
-
-func (c coords) Col() int {
-	return c.col
+	return b.String()
 }
 
 func New(size int) *Map {
@@ -51,7 +49,10 @@ func (m *Map) Copy() *Map {
 	res := New(len(m.Values))
 
 	for i, row := range m.Values {
-		res.Values[i] = row
+		for j := range row {
+			res.Values[i][j] = row[j]
+		}
+
 	}
 
 	return res

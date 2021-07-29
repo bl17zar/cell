@@ -24,6 +24,25 @@ func NewWithCentralSeed(size int) *Cell {
 	return newC
 }
 
+func NewWithDownShiftedSeed(size int) *Cell {
+	state := cellMap.New(size)
+
+	g := &graph.Graph{}
+	n, _ := graph.NewNode()
+	_ = g.AddNodes(n)
+
+	m := map[graph.NodeID]*Coords{
+		n.ID: {
+			Row: size - 1,
+			Col: size / 2,
+		},
+	}
+
+	newC, _ := New(state, g, m)
+
+	return newC
+}
+
 func NewWithCentralBoundedSeed(size, obstacleSize int) *Cell {
 	state := cellMap.New(size)
 

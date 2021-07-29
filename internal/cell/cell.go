@@ -13,11 +13,15 @@ type Coords struct {
 }
 
 type Cell struct {
-	Age     int
-	graph   *graph.Graph
-	mapping map[graph.NodeID]*Coords
-	State   *cellMap.Map
-	history map[int]*cellMap.Map
+	isCycled  bool
+	cycleFrom int
+	cycleSize int
+	cycledAge int
+	Age       int
+	graph     *graph.Graph
+	mapping   map[graph.NodeID]*Coords
+	State     *cellMap.Map
+	history   *history
 }
 
 func New(state *cellMap.Map, g *graph.Graph, m map[graph.NodeID]*Coords) (*Cell, error) {
@@ -29,16 +33,21 @@ func New(state *cellMap.Map, g *graph.Graph, m map[graph.NodeID]*Coords) (*Cell,
 		graph:   g,
 		mapping: m,
 		State:   state,
-		history: map[int]*cellMap.Map{},
+		history: newHistory(),
 	}, nil
 }
 
 func (c *Cell) startNewAge() error {
-	if err := c.clearCycles(); err != nil {
-		return err
+	if !c.isCycled {
+		if !c.checkIsCycled(c.State) {
+			c.history.Put(c.State.Copy())
+		}
+
+		if err := c.clearCycles(); err != nil {
+			return err
+		}
 	}
 
-	c.history[c.Age] = c.State
 	c.Age++
 
 	return nil
@@ -72,19 +81,34 @@ func (c *Cell) Evolve() error {
 		return err
 	}
 
-	g, m, err := c.produceNextGeneration()
-	if err != nil {
-		return err
+	if !c.isCycled {
+		g, m, err := c.produceNextGeneration()
+		if err != nil {
+			return err
+		}
+
+		newState, err := c.newState(g, m)
+		if err != nil {
+			return err
+		}
+
+		c.State = newState
+		c.graph = g
+		c.mapping = m
+
+		return nil
 	}
 
-	newState, err := c.newState(g, m)
+	cycleStateIdx := c.cycleFrom + (c.Age-c.cycleFrom)%c.cycleSize
+	state, err := c.history.GetByIdx(cycleStateIdx)
 	if err != nil {
-		return err
+		return nil
 	}
 
-	c.State = newState
-	c.graph = g
-	c.mapping = m
+	c.State = state.(*cellMap.Map)
+	c.cycledAge = cycleStateIdx - c.cycleFrom
+	c.graph = nil
+	c.mapping = nil
 
 	return nil
 }
@@ -243,4 +267,38 @@ func (c *Cell) mergeNodeDuplicates(g *graph.Graph, m *map[graph.NodeID]*Coords) 
 	}
 
 	return nil
+}
+
+func (c *Cell) checkIsCycled(state *cellMap.Map) bool {
+	if c.history.Exists(state) {
+		c.isCycled = true
+
+		d := c.history.Distance(state)
+		if d == -1 {
+			panic("wrong history cycle detection")
+		}
+
+		c.cycleSize = c.Age - d
+		c.cycleFrom = d
+
+		return true
+	}
+
+	return false
+}
+
+func (c *Cell) IsCycled() bool {
+	return c.isCycled
+}
+
+func (c *Cell) CycledAge() int {
+	return c.cycledAge
+}
+
+func (c *Cell) CycleFrom() int {
+	return c.cycleFrom
+}
+
+func (c *Cell) CycleSize() int {
+	return c.cycleSize
 }
