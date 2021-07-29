@@ -30,7 +30,10 @@ func (m *Machine) Run() {
 			}
 			tElapsed := time.Since(tStart)
 
-			fmt.Println(fmt.Sprint("generation: ", m.Cell.Age, "\nelapsed for evolve: ", tElapsed))
+			fmt.Println(fmt.Sprint("generation: ", m.Cell.Age, " | elapsed for evolve: ", tElapsed))
+			if m.Cell.IsCycled() {
+				fmt.Println(fmt.Sprint("cycle time: ", m.Cell.CycledAge(), " | cycle size: ", m.Cell.CycleSize()))
+			}
 
 			m.Drawer.Draw(m.Cell.State)
 		}
