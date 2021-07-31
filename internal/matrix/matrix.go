@@ -1,8 +1,6 @@
 package matrix
 
 import (
-	"fmt"
-
 	"github.com/bl17zar/cell/internal/graph"
 )
 
@@ -23,7 +21,7 @@ func GetAdjacencyMatrix(g *graph.Graph) [][]int {
 		matrix = append(matrix, make([]int, len(g.Nodes)))
 	}
 
-	nodesQueue := make([]*graph.Node, len(g.Nodes))
+	nodesQueue := make([]*graph.Node, 0, len(g.Nodes))
 
 	// order node from graph
 	for _, node := range g.Nodes {
@@ -37,33 +35,4 @@ func GetAdjacencyMatrix(g *graph.Graph) [][]int {
 	}
 
 	return matrix
-}
-
-/* ========== TEST ========== */
-
-func TestGetAdjacencyMatrix() int {
-	testMatrix := [2][2]int{
-		{0, 1},
-		{1, 0},
-	}
-
-	var testGraph *graph.Graph
-
-	testNode1, _ := graph.NewNode()
-	testNode2, _ := graph.NewNode()
-
-	testGraph.AddNodes(testNode1)
-	testGraph.AddNodes(testNode2)
-
-	matrix := GetAdjacencyMatrix(testGraph)
-
-	for i := 0; i < 2; i++ {
-		for j := 0; j < 2; j++ {
-			if matrix[i][j] != testMatrix[i][j] {
-				fmt.Print("FAIL\n")
-			}
-		}
-	}
-	fmt.Print("PASS\n")
-	return 0
 }

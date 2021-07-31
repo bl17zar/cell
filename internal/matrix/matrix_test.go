@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/bl17zar/cell/internal/graph"
@@ -13,12 +14,12 @@ func TestGetAdjacencyMatrix(t *testing.T) {
 		{1, 0},
 	}
 
-	var testGraph *graph.Graph
+	testGraph := &graph.Graph{}
 
 	testNode1, _ := graph.NewNode()
-	testNode2, _ := graph.NewNode()
-
 	testGraph.AddNodes(testNode1)
+
+	testNode2, _ := graph.NewNode(testNode1)
 	testGraph.AddNodes(testNode2)
 
 	matrix := matrix.GetAdjacencyMatrix(testGraph)
@@ -32,25 +33,9 @@ func TestGetAdjacencyMatrix(t *testing.T) {
 			}
 		}
 	})
+
+	for i := 0; i < 2; i++ {
+		fmt.Println(matrix[i])
+	}
+
 }
-
-// func TestAddNode(t *testing.T) {
-// 	g := NewGraph()
-
-// 	t.Run("addNode basic", func(t *testing.T) {
-// 		g.AddNode(1, 1)
-
-// 		if len(g.Nodes) != 0 {
-// 			t.Error("no nodes")
-// 		}
-// 	})
-
-// 	t.Run("addNode basic 1", func(t *testing.T) {
-// 		g.AddNode(1, 1)
-
-// 		if len(g.Nodes) == 0 {
-// 			t.Error("no nodes")
-// 		}
-// 	})
-
-// }
