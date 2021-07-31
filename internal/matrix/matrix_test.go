@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/bl17zar/cell/internal/graph"
-	"github.com/bl17zar/cell/internal/matrix"
 )
 
 func TestGetAdjacencyMatrix(t *testing.T) {
@@ -22,7 +21,7 @@ func TestGetAdjacencyMatrix(t *testing.T) {
 	testNode2, _ := graph.NewNode(testNode1)
 	testGraph.AddNodes(testNode2)
 
-	matrix := matrix.GetAdjacencyMatrix(testGraph)
+	matrix := GetAdjacencyMatrix(testGraph)
 
 	t.Run("Check matrix values", func(t *testing.T) {
 		for i := 0; i < 2; i++ {
