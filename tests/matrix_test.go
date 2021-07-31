@@ -33,3 +33,24 @@ func TestGetAdjacencyMatrix(t *testing.T) {
 		}
 	})
 }
+
+// func TestAddNode(t *testing.T) {
+// 	g := NewGraph()
+
+// 	t.Run("addNode basic", func(t *testing.T) {
+// 		g.AddNode(1, 1)
+
+// 		if len(g.Nodes) != 0 {
+// 			t.Error("no nodes")
+// 		}
+// 	})
+
+// 	t.Run("addNode basic 1", func(t *testing.T) {
+// 		g.AddNode(1, 1)
+
+// 		if len(g.Nodes) == 0 {
+// 			t.Error("no nodes")
+// 		}
+// 	})
+
+// }
