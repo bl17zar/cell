@@ -6,19 +6,22 @@ import (
 	"github.com/bl17zar/cell/internal/cell"
 	"github.com/bl17zar/cell/internal/drawer"
 	"github.com/bl17zar/cell/internal/machine"
+	"github.com/faiface/pixel/pixelgl"
 )
 
 const (
-	cellSize = 21
-	ww       = 2
+	cellSize     = 32
+	boundarySize = 5
 )
 
 func main() {
-	m := machine.Machine{
-		Cell:   cell.NewWithDownShiftedSeed(cellSize),
-		Drawer: drawer.NewConsoleDrawer(ww),
-		Speed:  time.Second,
-	}
+	pixelgl.Run(func() {
+		m := machine.Machine{
+			Cell:   cell.NewWithCentralBoundedSeed(cellSize, boundarySize),
+			Drawer: drawer.NewPixelDrawer(),
+			Speed:  time.Second,
+		}
 
-	m.Run()
+		m.Run()
+	})
 }

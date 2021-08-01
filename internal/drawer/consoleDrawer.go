@@ -7,23 +7,23 @@ import (
 	mapInternal "github.com/bl17zar/cell/internal/map"
 )
 
-type color string
+type consoleColor string
 
 const (
-	reset  color = "\033[0m"
-	red    color = "\033[31m"
-	green  color = "\033[32m"
-	yellow color = "\033[33m"
-	blue   color = "\033[34m"
-	purple color = "\033[35m"
-	cyan   color = "\033[36m"
-	gray   color = "\033[97m"
-	white  color = "\033[97m"
+	reset  consoleColor = "\033[0m"
+	red    consoleColor = "\033[31m"
+	green  consoleColor = "\033[32m"
+	yellow consoleColor = "\033[33m"
+	blue   consoleColor = "\033[34m"
+	purple consoleColor = "\033[35m"
+	cyan   consoleColor = "\033[36m"
+	gray   consoleColor = "\033[97m"
+	white  consoleColor = "\033[97m"
 )
 
 const widthWidener = " "
 
-var colors = map[string]color{
+var colors = map[string]consoleColor{
 	mapInternal.SymbolNode.String():           cyan,
 	mapInternal.SymbolEdgeHorizontal.String(): cyan,
 	mapInternal.SymbolEdgeVertical.String():   cyan,
@@ -68,7 +68,7 @@ func (d *ConsoleDrawer) Draw(m *mapInternal.Map) {
 	fmt.Print("\n")
 }
 
-func (d *ConsoleDrawer) handleSign(sym string, c color, destRow *[]string, currBuilder strings.Builder) strings.Builder {
+func (d *ConsoleDrawer) handleSign(sym string, c consoleColor, destRow *[]string, currBuilder strings.Builder) strings.Builder {
 	*destRow = append(*destRow, currBuilder.String())
 	*destRow = append(*destRow, fmt.Sprintf("%s%s%s", c, fmt.Sprint(d.widthWidener, sym), reset))
 

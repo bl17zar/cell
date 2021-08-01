@@ -1,7 +1,6 @@
 package matrix
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/bl17zar/cell/internal/graph"
@@ -32,9 +31,4 @@ func TestGetAdjacencyMatrix(t *testing.T) {
 			}
 		}
 	})
-
-	for i := 0; i < 2; i++ {
-		fmt.Println(matrix[i])
-	}
-
 }
