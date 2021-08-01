@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	cellSize     = 32
-	boundarySize = 5
+	cellSize     = 33
+	boundarySize = 7
 )
 
 func main() {
