@@ -236,32 +236,33 @@ func (c *Cell) mergeNodeDuplicates(g *graph.Graph, m *map[graph.NodeID]*Coords) 
 	}
 
 	for _, v := range duplicates {
-		if len(v) > 1 {
-			sNID := v[0]
-			for _, dID := range v {
-				if dID != sNID {
-					sN := g.Nodes[sNID]
-					dN := g.Nodes[dID]
+		if len(v) <= 1 {
+			continue
+		}
 
-					for _, dNeighbour := range dN.Neighbours() {
-						if err := dNeighbour.RemoveNeighbourByID(dN.ID); err != nil {
-							return err
-						}
+		survivorIdx := 0
+		sNID := v[survivorIdx]
+		for _, dID := range v[survivorIdx+1:] {
+			sN := g.Nodes[sNID]
+			dN := g.Nodes[dID]
 
-						if err := dNeighbour.AddNeighbours(sN); err != nil {
-							return err
-						}
-
-						if err := sN.AddNeighbours(dNeighbour); err != nil {
-							return err
-						}
-					}
-
-					delete(*m, dID)
-					if err := g.DeleteNodes(dN); err != nil {
-						return err
-					}
+			for _, dNeighbour := range dN.Neighbours() {
+				if err := dNeighbour.RemoveNeighbourByID(dN.ID); err != nil {
+					return err
 				}
+
+				if err := dNeighbour.AddNeighbours(sN); err != nil {
+					return err
+				}
+
+				if err := sN.AddNeighbours(dNeighbour); err != nil {
+					return err
+				}
+			}
+
+			delete(*m, dID)
+			if err := g.DeleteNodes(dN); err != nil {
+				return err
 			}
 		}
 	}
