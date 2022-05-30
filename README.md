@@ -1,6 +1,6 @@
 # cell
 
-cell is a small experiment project. it demonstrates disturbance propagation in a space with obtacles or without;
+cell is a small experiment project. it demonstrates disturbance propagation.
 
 ## features
 
