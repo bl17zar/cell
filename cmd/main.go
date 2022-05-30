@@ -15,9 +15,12 @@ const (
 
 func main() {
 	m := machine.Machine{
-		Cell:   cell.NewWithCentralBoundedSeed(cellSize, boundarySize),
-		Drawer: drawer.NewConsoleDrawer(2),
-		Speed:  time.Second,
+		Cell: cell.NewWithCentralBoundedSeed(cellSize, boundarySize),
+		Drawer: drawer.NewConsoleDrawer(2, &drawer.Opts{
+			UseClear:  true,
+			ClearSize: cellSize + 1, // + 1 to also clear stats
+		}),
+		Speed: time.Second,
 	}
 
 	m.Run()
