@@ -1,6 +1,6 @@
 # distsim
 
-distsim is a small experiment project. it demonstrates disturbance propagation.
+The goal of the project is to demonstrate **waves propagation** using **Huygens–Fresnel principle**. It can be used to demonstrate propagetion of light or any surface wave.
 
 ## features
 
