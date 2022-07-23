@@ -1,6 +1,7 @@
 package _map
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -71,7 +72,7 @@ func (m *Map) String() string {
 
 	for _, row := range m.Values {
 		for _, el := range row {
-			b.WriteString(string(el))
+			b.WriteString(fmt.Sprint(el))
 		}
 
 		b.WriteString("\n")
