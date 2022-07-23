@@ -1,6 +1,6 @@
-# distsym
+# distsim
 
-distsym is a small experiment project. it demonstrates disturbance propagation.
+distsim is a small experiment project. it demonstrates disturbance propagation.
 
 ## features
 
