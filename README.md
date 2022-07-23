@@ -7,7 +7,7 @@ distsym is a small experiment project. it demonstrates disturbance propagation.
 * arbitrary disturbance seed;
 * arbitrary obstacles;
 * interference and reflections simulations;
-* evolution cycles detection;
+* simulation cycles detection;
 
 ## how it works
 
