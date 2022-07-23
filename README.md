@@ -1,6 +1,6 @@
-# cell
+# distsym
 
-cell is a small experiment project. it demonstrates disturbance propagation.
+distsym is a small experiment project. it demonstrates disturbance propagation.
 
 ## features
 
